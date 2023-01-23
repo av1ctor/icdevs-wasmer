@@ -2,31 +2,6 @@ import fs from "fs";
 import {init, WASI} from '@wasmer/wasi';
 import {MoHelper} from './motoko-helper';
 
-/*
-const mainFile = mo.file('main.mo');
-mainFile.write(`
-    var name: Text = "";
-
-    module Main {
-        public func sayHello(name_: Text): Text {
-            name := name_;
-            return "Hello, " # name;
-        };
-
-        public func getName(): Text {
-            return name;
-        };
-    };
-
-    ignore Main.sayHello("Joe");
-    ignore Main.getName();
-`);
-
-const mainResult = mainFile.wasm('wasi');
-
-fs.writeFile("./main.wasm", mainResult.wasm, () => null);
-*/
-
 (async () => {
     await init();
 

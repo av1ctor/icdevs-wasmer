@@ -10,9 +10,6 @@
   },
   "author": "",
   "license": "ISC",
-  "dependencies": {
-    "motoko": "^3.3.0"
-  },
   "devDependencies": {
     "@types/node": "^18.11.18",
     "@wasmer/wasi": "^1.2.2",
