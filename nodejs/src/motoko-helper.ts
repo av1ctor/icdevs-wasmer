@@ -1,5 +1,5 @@
 export enum MoTag {
-    MoBlob = 17,
+    BLOB = 17,
     CONCAT = 25,
 }
 
@@ -30,7 +30,7 @@ function toObj(
     };
 }
 
-function toMoBlob(
+function toBlob(
     arr: Uint32Array
 ): MoBlob {
     return {
@@ -68,8 +68,8 @@ export class MoHelper {
         const arr = new Uint32Array(this.memory.buffer, ptr);
         const obj = toObj(arr);
         switch(obj.tag) {
-            case MoTag.MoBlob:
-                const blob = toMoBlob(arr);
+            case MoTag.BLOB:
+                const blob = toBlob(arr);
                 const bytes = new Uint8Array(this.memory.buffer, ptr + 8, blob.len);
                 return utf8Decoder.decode(bytes);
             case MoTag.CONCAT:

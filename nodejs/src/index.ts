@@ -16,13 +16,13 @@ import {MoHelper} from './motoko-helper';
     const helper = new MoHelper(exports);
 
     {
-        const result = exports.sayHello(0, helper.stringToText("v1ctor"));
-        console.log(`sayHello() = "${helper.textToString(result)}"`);
+        const result = exports.greet(0, helper.stringToText("v1ctor"));
+        console.log(`greet() = "${helper.textToString(result)}"`);
     }
 
     {
-        const result = exports.getName(0);
-        console.log(`getName() = "${helper.textToString(result)}"`);
+        const result = exports.getMessage(0);
+        console.log(`getMessage() = "${helper.textToString(result)}"`);
     }
 
     

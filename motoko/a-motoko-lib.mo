@@ -1,19 +1,19 @@
-var name: Text = "";
+var lastMessage: Text = "";
 
 module Main {
-    public func sayHello(
-        name_: Text
+    public func greet(
+        x: Text
     ): Text {
-        name := name_;
-        return "Hello, " # name;
+        lastMessage := "Hello, " # x;
+        return lastMessage;
     };
 
-    public func getName(
+    public func getMessage(
     ): Text {
-        return name;
+        return lastMessage;
     };
 };
 
 // note: we must call all functions that need to be "exported" or they won't get emitted
-ignore Main.sayHello("");
-ignore Main.getName();
+ignore Main.greet("");
+ignore Main.getMessage();
