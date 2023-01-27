@@ -36,20 +36,14 @@ namespace CsharpWasmer
         private void button1_Click(object sender, EventArgs e) {
             var res = instance.Call("greet", (int)0, (int)helper.StringToText(this.textBox1.Text));
             if(res != null && res.Length > 0) {
-                this.textBox2.Text = $"greet() = {helper.TextToString((uint)(int)res[0])}";
-            }
-            else { 
-                this.textBox2.Text = "null";
+                MessageBox.Show(helper.TextToString((uint)(int)res[0]), "greet() result");
             }
         }
 
         private void button2_Click(object sender, EventArgs e) {
             var res = instance.Call("getMessage", (int)0);
             if(res != null && res.Length > 0) {
-                this.textBox2.Text = $"getMessage() = {helper.TextToString((uint)(int)res[0])}";
-            }
-            else { 
-                this.textBox2.Text = "null";
+                MessageBox.Show(helper.TextToString((uint)(int)res[0]), "getMessage() result");
             }
         }
     }
