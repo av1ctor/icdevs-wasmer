@@ -1,5 +1,5 @@
 #!/bin/bash
-~/.cache/dfinity/versions/0.12.0/moc -wasi-system-api a-motoko-lib.mo
+~/.cache/dfinity/versions/0.12.1/moc -wasi-system-api a-motoko-lib.mo
 ~/wabt/bin/wasm2wat a-motoko-lib.wasm |
     sed '/(start $link_start.1)/i (export "alloc_blob" (func $alloc_blob)) (export "getMessage" (func $getMessage)) (export "greet" (func $greet))' >temp0.wat
 ~/wabt/bin/wat2wasm temp0.wat -o a-motoko-lib.wasm
