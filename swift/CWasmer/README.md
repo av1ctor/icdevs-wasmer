@@ -1,3 +1,3 @@
-# sw_sw
+# CWasmer
 
 A description of this package.
