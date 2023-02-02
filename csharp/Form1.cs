@@ -4,46 +4,42 @@ namespace CsharpWasmer
 {
     public partial class Form1 : Form
     {
-        public Instance instance;
         public MoHelper helper;
         
-        delegate int FdWriteDel (InstanceContext ctx, int p0, int p1, int p2, int p3);
-        private static int FdWrite(InstanceContext ctx, int p0, int p1, int p2, int p3) {
-            return 0;
-        }
-
         public Form1()
         {
             InitializeComponent();
 
+            helper = new MoHelper();
+
             var wasm = File.ReadAllBytes("a-motoko-lib.wasm");
-
-            var module = Module.Create(wasm);
-            if(module == null) {
+            if(wasm == null) {
+                MessageBox.Show("File not found");
                 return;
             }
 
-            var functionImport = new Import("wasi_unstable", "fd_write", new ImportFunction((FdWriteDel)(FdWrite)));
-
-            instance = module.Instatiate(functionImport);
-            if(instance == null) {
+            if(!helper.Load(wasm)) {
+                MessageBox.Show("Invalid wasm file");
                 return;
             }
 
-            helper = new MoHelper(instance);
+            if(!helper.Instanciate()) {
+                MessageBox.Show("Invalid module");
+                return;
+            }
         }
 
         private void button1_Click(object sender, EventArgs e) {
-            var res = instance.Call("greet", (int)0, (int)helper.StringToText(this.textBox1.Text));
+            var res = helper.Call("greet", 0, helper.StringToText(this.textBox1.Text));
             if(res != null && res.Length > 0) {
-                MessageBox.Show(helper.TextToString((uint)(int)res[0]), "greet() result");
+                MessageBox.Show(helper.TextToString((int)res[0]), "greet() result");
             }
         }
 
         private void button2_Click(object sender, EventArgs e) {
-            var res = instance.Call("getMessage", (int)0);
+            var res = helper.Call("getMessage", (int)0);
             if(res != null && res.Length > 0) {
-                MessageBox.Show(helper.TextToString((uint)(int)res[0]), "getMessage() result");
+                MessageBox.Show(helper.TextToString((int)res[0]), "getMessage() result");
             }
         }
     }
