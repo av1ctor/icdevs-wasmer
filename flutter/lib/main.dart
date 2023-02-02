@@ -1,11 +1,9 @@
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
-import 'package:flutter_wasm/flutter_wasm.dart';
 import 'package:flutter_wasmer/motoko_helper.dart';
 
-WasmInstance? instance;
-MoHelper? helper;
+MoHelper helper = MoHelper();
 
 void main() async {
   runApp(const MyApp());
@@ -19,11 +17,12 @@ Future<Uint8List> loadWasm() async {
 
 Future<void> buildWasmInstance() async {
   final wasm = await loadWasm();
-  final builder = wasmModuleCompileSync(wasm).builder();
-  builder.addFunction(
-      "wasi_unstable", "fd_write", (int a, int b, int c, int d) => 0);
-  instance = builder.build();
-  helper = MoHelper(instance!);
+  if (!helper.load(wasm)) {
+    return;
+  }
+  if (!helper.instanciate()) {
+    return;
+  }
 }
 
 class MyApp extends StatelessWidget {
@@ -81,19 +80,15 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void callGreet() {
-    if (instance != null) {
-      var greet = instance?.lookupFunction("greet");
-      var res = greet(0, helper!.stringToText(name));
-      _showAlertDialog(helper!.textToString(res));
-    }
+    var greet = helper.lookupFunction("greet");
+    var res = greet(0, helper.stringToText(name));
+    _showAlertDialog(helper.textToString(res));
   }
 
   void callGetLastMessage() {
-    if (instance != null) {
-      var getMessage = instance?.lookupFunction("getMessage");
-      var res = getMessage(0);
-      _showAlertDialog(helper!.textToString(res));
-    }
+    var getMessage = helper.lookupFunction("getMessage");
+    var res = getMessage(0);
+    _showAlertDialog(helper.textToString(res));
   }
 
   @override

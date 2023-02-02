@@ -1,5 +1,5 @@
 import 'dart:convert';
-
+import 'dart:typed_data';
 import 'package:flutter_wasm/flutter_wasm.dart';
 
 enum MoTag {
@@ -55,25 +55,48 @@ MoConcat toConcat(List<int> list) {
 }
 
 class MoHelper {
-  WasmInstance instance;
+  WasmInstanceBuilder? builder;
+  WasmInstance? instance;
   dynamic allocBlob;
 
-  MoHelper(this.instance) : allocBlob = instance.lookupFunction("alloc_blob");
+  bool load(Uint8List wasm) {
+    builder = wasmModuleCompileSync(wasm).builder();
+    builder?.addFunction(
+        "wasi_unstable", "fd_write", (int a, int b, int c, int d) => 0);
+    return true;
+  }
+
+  bool instanciate() {
+    instance = builder?.build();
+    if (instance == null) {
+      return false;
+    }
+    allocBlob = instance?.lookupFunction("alloc_blob");
+    return true;
+  }
+
+  dynamic lookupFunction(String name) {
+    return instance?.lookupFunction(name);
+  }
 
   String textToString(int skewedPtr) {
     var ptr = skewedPtr + 1;
-    var arr = instance.memory.view.skip(ptr).toList();
-    var obj = toObj(arr);
-    switch (obj.tag) {
-      case MoTag.blob:
-        var blb = toBlob(arr);
-        var bytes = arr.skip(8).take(blb.len).toList();
-        return const Utf8Decoder().convert(bytes);
-      case MoTag.concat:
-        var conc = toConcat(arr);
-        return textToString(conc.text1) + textToString(conc.text2);
-      default:
-        return '';
+    var arr = instance?.memory.view.skip(ptr).toList();
+    if (arr != null) {
+      var obj = toObj(arr);
+      switch (obj.tag) {
+        case MoTag.blob:
+          var blb = toBlob(arr);
+          var bytes = arr.skip(8).take(blb.len).toList();
+          return const Utf8Decoder().convert(bytes);
+        case MoTag.concat:
+          var conc = toConcat(arr);
+          return textToString(conc.text1) + textToString(conc.text2);
+        default:
+          return '';
+      }
+    } else {
+      return '';
     }
   }
 
@@ -83,7 +106,7 @@ class MoHelper {
     var ptr = skewedPtr + 1;
 
     for (var i = 0; i < encoded.lengthInBytes; i++) {
-      instance.memory.view[ptr + 8 + i] = encoded[i];
+      instance?.memory.view[ptr + 8 + i] = encoded[i];
     }
 
     return skewedPtr;
