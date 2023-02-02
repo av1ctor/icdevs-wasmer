@@ -1,9 +1,9 @@
-NodeJS and Motoko integration
+# NodeJS and Motoko integration
 
-1. run: npm init
-2. run: npm run start
+1. Run: npm init
+2. Run: npm run start
 
-Example code:
+## Example code
 
     const helper = new MoHelper();
     
