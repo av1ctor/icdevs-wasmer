@@ -1,3 +1,5 @@
 # CWasmer
 
-A description of this package.
+Package binding to the Wasmer C API.
+
+
