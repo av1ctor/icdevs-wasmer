@@ -1,16 +1,10 @@
-# flutter_wasmer
+Flutter/Dart and Motoko integration
 
-A new Flutter project.
+1. Follow https://github.com/dart-lang/wasm/blob/main/flutter_wasm/README.md to install the libraries needed
+2. Clone the https://github.com/dart-lang/wasm repository to build on Linux or https://github.com/av1ctor/wasm to build on Windows
+3. Build using Visual Studio Code
 
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Notes:
+1. flutter_wasm has no support por iOS, only for Android
+2. flutter_wasm will take ages to build the wasmer for Android (the build also failed on Linux Ubuntu because it tries to link to Ubuntu libraries with the Android ones)
+  
