@@ -1,6 +1,6 @@
 # NodeJS and Motoko integration
 
-1. Run: npm init
+1. Run: npm install
 2. Run: npm run start
 
 ## Example code
