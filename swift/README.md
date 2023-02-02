@@ -1,10 +1,10 @@
-Swift and Motoko integration
+# Swift and Motoko integration
 
 1. Install Wamsmer on Mac OS: curl https://get.wasmer.io -sSfL | sh
 2. Create a pkg-config file: wasmer config --pkg-config > /usr/local/lib/pkgconfig/wasmer.pc
 3. Build using XCode
 
-Example code:
+## Example code
 
     try helper.load(bytes: bytes)
     try helper.instanciate()
