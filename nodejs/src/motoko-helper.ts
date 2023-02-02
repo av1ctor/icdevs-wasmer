@@ -1,3 +1,5 @@
+import {init, WASI} from '@wasmer/wasi';
+
 export enum MoTag {
     BLOB = 17,
     CONCAT = 25,
@@ -51,14 +53,42 @@ function toConcat(
 }
 
 export class MoHelper {
-    memory: WebAssembly.Memory;
-    table: WebAssembly.Table;
-    allocBlob: (bytes: number) => number;
+    wasi?: WASI;
+    module?: WebAssembly.Module;
+    instance?: WebAssembly.Instance;
+    memory: WebAssembly.Memory = {} as any;
+    allocBlob: (bytes: number) => number = () => 0;
     
-    constructor(exports: any) {
-        this.memory = exports.memory;
-        this.table = exports.table;
-        this.allocBlob = exports.alloc_blob;
+    constructor() {
+    }
+
+    async load(
+        wasm: Buffer
+    ): Promise<boolean> {
+        await init();
+
+        this.wasi = new WASI({});
+    
+        this.module = await WebAssembly.compile(wasm);
+
+        return !!this.module;
+    }
+
+    instanciate(
+    ): boolean {
+        this.instance = this.wasi?.instantiate(this.module, {});
+        if(!this.instance) {
+            return false;
+        }
+        this.wasi?.start(this.instance);
+        this.memory = this.instance.exports.memory as any;
+        this.allocBlob = this.instance?.exports.alloc_blob as any;
+        return true;
+    }
+
+    call(name: string, ...args: any[]): any {
+        const func = this.instance?.exports[name] as any;
+        return func(...args);
     }
 
     textToString(

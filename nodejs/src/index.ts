@@ -1,27 +1,27 @@
 import fs from "fs";
-import {init, WASI} from '@wasmer/wasi';
 import {MoHelper} from './motoko-helper';
 
 (async () => {
-    await init();
+    const helper = new MoHelper();
+    
+    const wasm = fs.readFileSync("./a-motoko-lib.wasm")
+    if(!await helper.load(wasm)) {
+        console.error("Invalid file");
+        return;
+    };
 
-    const wasi = new WASI({});
-
-    const module = await WebAssembly.compile(fs.readFileSync("./a-motoko-lib.wasm"));
-    const instance = wasi.instantiate(module, {});
-    wasi.start(instance);
-
-    const exports = instance.exports as any;
-
-    const helper = new MoHelper(exports);
+    if(!helper.instanciate()) {
+        console.error("Invalid module");
+        return;
+    }
 
     {
-        const result = exports.greet(0, helper.stringToText("v1ctor"));
+        const result = helper.call('greet', 0, helper.stringToText("v1ctor"));
         console.log(`greet() = "${helper.textToString(result)}"`);
     }
 
     {
-        const result = exports.getMessage(0);
+        const result = helper.call('getMessage', 0);
         console.log(`getMessage() = "${helper.textToString(result)}"`);
     }
 
