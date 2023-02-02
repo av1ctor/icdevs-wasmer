@@ -1,9 +1,9 @@
-C# and Motoko integration
+# C# and Motoko integration
 
 1. Install the .Net Wasmer binding at https://github.com/migueldeicaza/WasmerSharp
 2. Build using Visual Studio 22
 
-Example code:
+## Example code
 
     var wasm = File.ReadAllBytes("a-motoko-lib.wasm");
     if(wasm == null) {
