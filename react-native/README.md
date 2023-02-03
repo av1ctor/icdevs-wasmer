@@ -1,5 +1,6 @@
 # React Native and Motoko integration
 1. Run: npm install
+2. Setup react native depending on the target OS: https://reactnative.dev/docs/environment-setup 
 2. Generate the APK for Android following this guide: https://reactnative.dev/docs/0.70/signed-apk-android
 3. Run on the iOS Simulator: https://reactnative.dev/docs/0.70/running-on-simulator-ios (sorry, I don't have an iPhone to test)
 
