@@ -21,5 +21,8 @@ See: https://forum.dfinity.org/t/open-icdevs-org-bounty-34-wasmer-motoko-10-000/
 ### Flutter/Dart on iOS
 ![alt text](./images/flutter-android.png?raw=true)
 
+### Swift on Mac OS
+![alt text](./images/swift-macos.png?raw=true)
+
 ### C# on Windows
 ![alt text](./images/csharp-windows.png?raw=true)
