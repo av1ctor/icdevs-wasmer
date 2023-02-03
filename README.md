@@ -11,10 +11,15 @@ See: https://forum.dfinity.org/t/open-icdevs-org-bounty-34-wasmer-motoko-10-000/
 6. /swift: Swift version (tested on Mac OS 12 Monterey only)
 
 ## Screenshots
+
+### React Native on iOS
 ![alt text](./images/react-native-ios.png?raw=true)
 
+### React Native on Android
 ![alt text](./images/react-native-android.png?raw=true)
 
+### Flutter/Dart on iOS
 ![alt text](./images/flutter-android.png?raw=true)
 
+### C# on Windows
 ![alt text](./images/csharp-windows.png?raw=true)
