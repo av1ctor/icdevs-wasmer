@@ -1,6 +1,6 @@
 # React Native and Motoko integration
 1. Run: npm install
-2. Setup react native depending on the target OS: https://reactnative.dev/docs/environment-setup 
+2. Setup React Native depending on the host and target OS: https://reactnative.dev/docs/environment-setup (on Mac OS you must install rbenv (brew install rbenv), then install the right Ruby version (see the .ruby_version file at the root dir and run rbenv install VERSION), then start rbenv (run: eval "$(rbenv init - zsh)"), then install cocoapods (sudo gem install cocoapods -V), then cd to ios and run pod install (or pod update)... if think that's it :P) 
 2. Generate the APK for Android following this guide: https://reactnative.dev/docs/0.70/signed-apk-android
 3. Run on the iOS Simulator: https://reactnative.dev/docs/0.70/running-on-simulator-ios (sorry, I don't have an iPhone to test)
 
