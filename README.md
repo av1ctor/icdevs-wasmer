@@ -4,8 +4,8 @@ See: https://forum.dfinity.org/t/open-icdevs-org-bounty-34-wasmer-motoko-10-000/
 
 ## Folders
 1. /csharp: C# version (tested on Windows 10 only)
-2. /flutter/wasmer: dart/flutter Wasmer version (only for Android as flutter_wasm doesn't support iOS yet)
-3. /flutter/wasm3: dart/flutter Wasm3 version (for Android and iOS!)
+2. /flutter/wasmer: Dart/Flutter Wasmer version (only for Android as flutter_wasm doesn't support iOS yet)
+3. /flutter/wasm3: Dart/Flutter Wasm3 version (for Android and iOS!)
 4. /motoko: the Motoko library (build using build.sh)
 5. /nodejs: Typescript/nodejs version (tested on Ubuntu 22 only)
 6. /react-native: React Native version (tested on Android and iOS, uses wasm2js as React Native has no WebAssembly support on Android and no support on iOS in the real hardware)
