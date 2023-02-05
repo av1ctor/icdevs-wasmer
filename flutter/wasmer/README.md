@@ -1,4 +1,4 @@
-# Flutter/Dart and Motoko integration
+# Flutter/Dart and Motoko integration (Wasmer version)
 
 1. Follow https://github.com/dart-lang/wasm/blob/main/flutter_wasm/README.md to install the libraries needed
 2. Clone the https://github.com/dart-lang/wasm repository to build on Linux or https://github.com/av1ctor/wasm to build on Windows
