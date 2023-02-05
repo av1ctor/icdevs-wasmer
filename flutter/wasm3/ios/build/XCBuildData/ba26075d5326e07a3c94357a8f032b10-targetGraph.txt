@@ -1,7 +1,0 @@
-Target dependency graph (3 targets)
-Flutter in Pods, no dependencies
-wasm3 in Pods, depends on:
-Flutter in Pods (explicit)
-Pods-Runner in Pods, depends on:
-Flutter in Pods (explicit)
-wasm3 in Pods (explicit)
