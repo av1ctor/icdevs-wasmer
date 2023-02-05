@@ -31,11 +31,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter <-> Motoko demo',
+      title: 'Flutter <-> Motoko demo (wasmer)',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(title: 'Flutter <-> Motoko demo'),
+      home: const MyHomePage(title: 'Flutter <-> Motoko demo (wasmer)'),
     );
   }
 }
