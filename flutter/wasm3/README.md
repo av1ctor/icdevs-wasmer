@@ -7,7 +7,7 @@
 5. Run "flutter pub get" inside "[this-project-path]/flutter/wasm3" folder
 6. Start the iOS simulator, running "open -a Simulator"
 7. Run "flutter run" at the same folder as in item 5
-8. If something fails, read also https://docs.flutter.dev/development/platform-integration/ios/c-interop
+8. If something fail, read also https://docs.flutter.dev/development/platform-integration/ios/c-interop
 
 ## Example code
 
