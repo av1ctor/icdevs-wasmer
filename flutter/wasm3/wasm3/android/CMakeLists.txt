@@ -1,7 +1,6 @@
 cmake_minimum_required(VERSION 3.11)
 
 project(m3)
-add_subdirectory(../ios/Classes/wasm3/source ./bin)
 
 # Detect MinGW
 if(WIN32 AND CMAKE_C_COMPILER_ID MATCHES "GNU")
@@ -80,6 +79,8 @@ set(CMAKE_EXE_LINKER_FLAGS_DEBUG "-O0")
 set(CMAKE_EXE_LINKER_FLAGS_RELEASE "-O3")
 
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Dd_m3HasWASI -DWASM_SIMPLE")
+
+add_subdirectory(../ios/Classes/wasm3/source ./bin)
 
 message("Flags:         ${CMAKE_C_FLAGS}")
 message("Debug flags:   ${CMAKE_C_FLAGS_DEBUG}")
