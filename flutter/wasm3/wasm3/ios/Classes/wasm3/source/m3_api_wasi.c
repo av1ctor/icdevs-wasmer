@@ -12,7 +12,7 @@
 #include "m3_env.h"
 #include "m3_exception.h"
 
-#if defined(d_m3HasWASI)
+//#if defined(d_m3HasWASI)
 
 // Fixup wasi_core.h
 #if defined (M3_COMPILER_MSVC)
@@ -669,7 +669,7 @@ m3ApiRawFunction(m3_wasi_generic_fd_datasync)
     m3ApiReturn(ret == 0 ? __WASI_ERRNO_SUCCESS : ret);
 }
 
-m3ApiRawFunction(m3_wasi_generic_random_get)
+/*m3ApiRawFunction(m3_wasi_generic_random_get)
 {
     m3ApiReturnType  (uint32_t)
     m3ApiGetArgMem   (uint8_t *            , buf)
@@ -713,7 +713,7 @@ m3ApiRawFunction(m3_wasi_generic_random_get)
             buf_len -= retlen;
         }
     }
-}
+}*/
 
 m3ApiRawFunction(m3_wasi_generic_clock_res_get)
 {
@@ -863,7 +863,7 @@ _       (SuppressLookupFailure (m3_LinkRawFunction (module, wasi, "path_open",  
 //_     (SuppressLookupFailure (m3_LinkRawFunction (module, wasi, "poll_oneoff",          "i(**i*)", &m3_wasi_generic_poll_oneoff)));
 _       (SuppressLookupFailure (m3_LinkRawFunctionEx (module, wasi, "proc_exit",          "v(i)",    &m3_wasi_generic_proc_exit, wasi_context)));
 //_     (SuppressLookupFailure (m3_LinkRawFunction (module, wasi, "proc_raise",           "i(i)",    )));
-_       (SuppressLookupFailure (m3_LinkRawFunction (module, wasi, "random_get",           "i(*i)",   &m3_wasi_generic_random_get)));
+//_       (SuppressLookupFailure (m3_LinkRawFunction (module, wasi, "random_get",           "i(*i)",   &m3_wasi_generic_random_get)));
 //_     (SuppressLookupFailure (m3_LinkRawFunction (module, wasi, "sched_yield",          "i()",     )));
 
 //_     (SuppressLookupFailure (m3_LinkRawFunction (module, wasi, "sock_recv",            "i(i*ii**)",        )));
@@ -875,4 +875,4 @@ _catch:
     return result;
 }
 
-#endif // d_m3HasWASI
+//#endif // d_m3HasWASI

@@ -23,7 +23,7 @@
 //------------------------------------------------------------------------------------------------------
 
 #ifndef M3_COMPILE_OPCODES
-#  error "Opcodes should only be included in one compilation unit"
+//#  error "Opcodes should only be included in one compilation unit"
 #endif
 
 #include "m3_math_utils.h"

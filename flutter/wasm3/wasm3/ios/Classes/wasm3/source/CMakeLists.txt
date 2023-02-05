@@ -46,7 +46,7 @@ else()
 endif()
 
 if(BUILD_WASI MATCHES "simple")
-    target_compile_definitions(m3 PUBLIC d_m3HasWASI)
+    target_compile_definitions(m3 PUBLIC d_m3HasWASI WASI_SIMPLE)
 elseif(BUILD_WASI MATCHES "metawasi")
     target_compile_definitions(m3 PUBLIC d_m3HasMetaWASI)
 elseif(BUILD_WASI MATCHES "uvwasi")
