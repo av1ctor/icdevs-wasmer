@@ -1,16 +1,19 @@
-# flutter_wasm3
+# Flutter/Dart and Motoko integration (Wasm3 version)
 
-A new Flutter project.
+1. Install XCode from the App Store
+2. Install the XCode command-line tools (see https://www.freecodecamp.org/news/install-xcode-command-line-tools/)
+3. Install CocoaPods (see https://guides.cocoapods.org/using/getting-started.html) - Note: ruby and gem must be installed first
+4. Install Flutter (see https://docs.flutter.dev/get-started/install/macos)
+5. Run "flutter pub get" inside "[this-project-path]/flutter/wasm3" folder
+6. Start the iOS simulator, running "open -a Simulator"
+7. Run "flutter run" at the same folder as in item 5
+8. If something fails, read also https://docs.flutter.dev/development/platform-integration/ios/c-interop
 
-## Getting Started
+## Example code
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+    var helper = MoHelper(wasm);
+    ...
+    var greet = helper!.lookupFunction("greet");
+    var res = helper!.callFunction(greet, [0, helper!.stringToText(name)]);
+    print(helper!.textToString(res));
+  
