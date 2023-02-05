@@ -1,5 +1,8 @@
 cmake_minimum_required(VERSION 3.11)
 
+project(m3)
+add_subdirectory(../ios/Classes/wasm3/source ./bin)
+
 # Detect MinGW
 if(WIN32 AND CMAKE_C_COMPILER_ID MATCHES "GNU")
   set(MINGW             1)
@@ -15,12 +18,6 @@ set(BUILD_WASI "simple" CACHE STRING "WASI implementation")
 set_property(CACHE BUILD_WASI PROPERTY STRINGS none simple uvwasi metawasi)
 
 option(BUILD_NATIVE "Build with machine-specific optimisations" ON)
-
-set(OUT_FILE "wasm3")
-
-if(NOT APP_DIR)
-  set(APP_DIR  "../ios/Classes/wasm3/platforms/app")
-endif()
 
 # Configure the toolchain
 
@@ -39,17 +36,10 @@ if(BUILD_32BIT)
   set(CMAKE_C_FLAGS      "${CMAKE_C_FLAGS}   -m32")
 endif()
 
-
-
-project(wasm3)
-
-message("----")
 message("Generator:  ${CMAKE_GENERATOR}")
 message("Compiler:   ${CMAKE_C_COMPILER_ID}")
 message("Build Type: ${CMAKE_BUILD_TYPE}")
 
-
-include(CheckIPOSupported)
 
 set(CMAKE_C_STANDARD 99)
 set(CMAKE_C_STANDARD_REQUIRED YES)
@@ -59,103 +49,37 @@ set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED YES)
 set(CMAKE_CXX_EXTENSIONS NO)
 
-
-file(GLOB app_srcs "${APP_DIR}/*.c")
-add_executable(${OUT_FILE} ${app_srcs})
-
 #-fno-optimize-sibling-calls
 
 set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -DDEBUG=1")
 
-if(MSVC OR CMAKE_C_COMPILER_FRONTEND_VARIANT MATCHES "MSVC")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Dd_m3HasTracer") #-Dd_m3FixedHeap=1048576
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Wextra -Wparentheses -Wundef -Wpointer-arith -Wstrict-aliasing=2")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Werror=implicit-function-declaration") # -Werror=cast-align
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-unused-function -Wno-unused-variable -Wno-unused-parameter -Wno-missing-field-initializers")
+if (CMAKE_C_COMPILER_ID MATCHES "Clang")
+	# TODO: Place clang-specific options here
+elseif(CMAKE_C_COMPILER_ID MATCHES "Intel")
+	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fp-model precise")
+elseif(CMAKE_C_COMPILER_ID MATCHES "GNU")
+	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wjump-misses-init")
+endif()
+set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -ggdb -O0")
 
-  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Dd_m3HasTracer -D_CRT_SECURE_NO_WARNINGS /WX- /diagnostics:column")
+set(CMAKE_C_FLAGS_RELEASE "-O3 -Wfatal-errors -fomit-frame-pointer -fno-stack-check -fno-stack-protector") #-fno-inline
 
-  string(REGEX REPLACE "/W[0-4]" "/W0" CMAKE_C_FLAGS "${CMAKE_C_FLAGS}")
-
-  if (CMAKE_C_COMPILER_ID MATCHES "MSVC")
-
-    if("${CMAKE_SIZEOF_VOID_P}" STREQUAL "4")
-      set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /d2noftol3")
-    endif()
-
-    set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} /Oxs /Oy /GS- /Zi /Zo /arch:AVX2")
-
-    # Uncomment this if you want to disassemble the release build,
-    # for example: dumpbin /DISASM wasm3.exe /out:wasm3.S
-    #set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /DEBUG:FULL")
-
-  else()
-    set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} /Oxs /Oy /GS- /Qvec -Clang -O3")
-  endif()
-
-  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /STACK:8388608") # stack size
-
-else()
-
-  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Dd_m3HasTracer") #-Dd_m3FixedHeap=1048576
-  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Wextra -Wparentheses -Wundef -Wpointer-arith -Wstrict-aliasing=2")
-  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Werror=implicit-function-declaration") # -Werror=cast-align
-  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-unused-function -Wno-unused-variable -Wno-unused-parameter -Wno-missing-field-initializers")
-  if (CMAKE_C_COMPILER_ID MATCHES "Clang")
-    # TODO: Place clang-specific options here
-  elseif(CMAKE_C_COMPILER_ID MATCHES "Intel")
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fp-model precise")
-  elseif(CMAKE_C_COMPILER_ID MATCHES "GNU")
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wjump-misses-init")
-  endif()
-  set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -ggdb -O0")
-
-  set(CMAKE_C_FLAGS_RELEASE "-O3 -Wfatal-errors -fomit-frame-pointer -fno-stack-check -fno-stack-protector") #-fno-inline
-
-  if(BUILD_NATIVE)
-    if(APPLE AND CMAKE_C_COMPILER_ID MATCHES "Clang" AND CMAKE_HOST_SYSTEM_PROCESSOR MATCHES "arm64")
-      set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -mcpu=native")
-    else()
-      set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -march=native")
-    endif()
-  endif()
-
-  set(CMAKE_EXE_LINKER_FLAGS_DEBUG "-O0")
-  set(CMAKE_EXE_LINKER_FLAGS_RELEASE "-O3")
-
-  target_link_libraries(${OUT_FILE} m)
-
+if(BUILD_NATIVE)
+	if(APPLE AND CMAKE_C_COMPILER_ID MATCHES "Clang" AND CMAKE_HOST_SYSTEM_PROCESSOR MATCHES "arm64")
+		set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -mcpu=native")
+	else()
+		set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -march=native")
+	endif()
 endif()
 
-target_link_libraries(${OUT_FILE} m3)
+set(CMAKE_EXE_LINKER_FLAGS_DEBUG "-O0")
+set(CMAKE_EXE_LINKER_FLAGS_RELEASE "-O3")
 
-if(BUILD_WASI MATCHES "simple")
-  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Dd_m3HasWASI -DWASM_SIMPLE")
-elseif(BUILD_WASI MATCHES "metawasi")
-  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Dd_m3HasMetaWASI")
-elseif(BUILD_WASI MATCHES "uvwasi")
-  include(FetchContent)
-  FetchContent_Declare(
-    uvwasi
-    GIT_REPOSITORY https://github.com/nodejs/uvwasi.git
-    GIT_TAG 02a7e485a50c61af7d79d4a55a4a2d042e5c1c1c
-  )
-
-  FetchContent_GetProperties(uvwasi)
-  if(NOT uvwasi_POPULATED)
-    FetchContent_Populate(uvwasi)
-    include_directories("${uvwasi_SOURCE_DIR}/include")
-    add_subdirectory(${uvwasi_SOURCE_DIR} ${uvwasi_BINARY_DIR} EXCLUDE_FROM_ALL)
-  endif()
-  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Dd_m3HasUVWASI")
-  target_link_libraries(${OUT_FILE} uvwasi_a uv_a)
-endif()
-
-check_ipo_supported(RESULT result)
-if(result AND NOT WASIENV) # TODO: LTO breaks wasm imports
-  set_property(TARGET ${OUT_FILE} PROPERTY INTERPROCEDURAL_OPTIMIZATION True)
-  message("LTO:        ON")
-else()
-  message("LTO:        OFF")
-endif()
-
-add_subdirectory(../ios/Classes/wasm3/source ./bin)
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Dd_m3HasWASI -DWASM_SIMPLE")
 
 message("Flags:         ${CMAKE_C_FLAGS}")
 message("Debug flags:   ${CMAKE_C_FLAGS_DEBUG}")
